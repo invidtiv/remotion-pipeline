@@ -24,6 +24,9 @@ export function runRemotion(input: RemotionStageInput): Promise<RemotionStageRes
   return new Promise((resolve, reject) => {
     const args = ['remotion', 'render', 'src/index.ts', input.compositionId, input.outFile];
     if (input.propsFile) args.push(`--props=${input.propsFile}`);
+    // Windows + Node 23 has a known `kill EPERM` race in the multi-worker
+    // renderer cleanup path. Force a single worker to sidestep it.
+    args.push('--concurrency=1');
     args.push('--log=info');
 
     const child = spawn('npx', args, {
