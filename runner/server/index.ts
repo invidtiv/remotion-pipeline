@@ -80,6 +80,7 @@ if (existsSync(webDist)) {
 
 app.listen(CONFIG.port, () => {
   console.log(`Runner up on http://localhost:${CONFIG.port}`);
+  console.log(`  claude bin: ${CONFIG.claudeBin}`);
 });
 
 const shutdown = () => { console.log('Shutting down…'); process.exit(0); };
