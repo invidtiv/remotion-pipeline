@@ -140,6 +140,28 @@ Now Claude Code can generate an avatar clip via HeyGen, then composite it into a
 
 ---
 
+## Runner App (local web UI)
+
+A bundled local web app drives the pipeline interactively. From the repo root:
+
+```bash
+npm install
+npm run runner          # production: builds web, starts server on :4317
+# or
+npm run runner:dev      # dev: vite + tsx watch on :4318 (web) + :4317 (api)
+```
+
+Or double-click `start-runner.bat` on Windows.
+
+Open http://localhost:4317. Three input modes:
+- **Prompt** — natural language; spawns `claude` CLI to write a new composition.
+- **Structured JSON** — fills the bundled `StructuredScript` composition.
+- **Existing composition** — pick any composition registered in `src/Root.tsx`.
+
+Stage progress streams over SSE. Completed runs are stored under `runs/<timestamp>_<slug>/` with the script, the rendered MP4s, a `meta.json`, and the full log.
+
+---
+
 ## Troubleshooting
 
 - **`ffmpeg: command not found` during post-processing** — either install system FFmpeg, or have Claude use `npx remotion ffmpeg` (ships with Remotion v4+, supports H.264/H.265/VP8/VP9/ProRes).
