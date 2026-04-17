@@ -6,6 +6,7 @@ import { createFfmpegParser } from './parsers/ffmpeg.js';
 export interface FfmpegStageInput {
   inFile: string;
   outFile: string;
+  ffmpegCmd: string[];      // e.g. ['ffmpeg'] or ['npx','remotion','ffmpeg']
   onStarted?: () => void;
   onStdout?: (s: string) => void;
 }
@@ -14,7 +15,7 @@ export interface FfmpegStageResult { bytes: number }
 
 export function runFfmpeg(input: FfmpegStageInput): Promise<FfmpegStageResult> {
   return new Promise((resolve, reject) => {
-    const args = [
+    const ffmpegArgs = [
       '-y', '-i', input.inFile,
       '-c:v', 'libx264', '-crf', '28', '-preset', 'slow',
       '-pix_fmt', 'yuv420p',
@@ -22,7 +23,8 @@ export function runFfmpeg(input: FfmpegStageInput): Promise<FfmpegStageResult> {
       '-c:a', 'aac', '-b:a', '128k',
       input.outFile,
     ];
-    const child = spawn('ffmpeg', args, { shell: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    const [bin, ...prefix] = input.ffmpegCmd;
+    const child = spawn(bin, [...prefix, ...ffmpegArgs], { shell: true, stdio: ['ignore', 'pipe', 'pipe'] });
     const parser = createFfmpegParser(e => { if (e.type === 'started') input.onStarted?.(); });
     const onChunk = (b: Buffer) => { const s = b.toString(); input.onStdout?.(s); parser.feed(s); };
     child.stdout.on('data', onChunk);

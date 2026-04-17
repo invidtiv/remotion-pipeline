@@ -33,9 +33,29 @@ function resolveClaudeBin(): string {
   return 'claude';
 }
 
+// Resolves the ffmpeg invocation as an array (binary + leading args).
+// Prefers a system install; falls back to `npx remotion ffmpeg` which ships
+// with Remotion 4. Returning an array lets the caller spawn either a single
+// binary or `npx remotion ffmpeg <args>` uniformly.
+function resolveFfmpegCmd(): string[] {
+  const env = process.env.FFMPEG_BIN;
+  if (env && existsSync(env)) return [env];
+
+  const lookup = process.platform === 'win32' ? 'where' : 'which';
+  try {
+    const found = execFileSync(lookup, ['ffmpeg'], { encoding: 'utf8', shell: false })
+      .split(/\r?\n/).map(s => s.trim()).filter(Boolean)[0];
+    if (found && existsSync(found)) return [found];
+  } catch { /* not on PATH */ }
+
+  // Bundled with Remotion 4 — guaranteed available since `remotion` is a dep.
+  return ['npx', 'remotion', 'ffmpeg'];
+}
+
 export const CONFIG = {
   port: parseInt(process.env.RUNNER_PORT ?? '4317', 10),
   claudeBin: resolveClaudeBin(),
+  ffmpegCmd: resolveFfmpegCmd(),
   projectRoot: process.cwd(),
   runsDir: 'runs',
 };

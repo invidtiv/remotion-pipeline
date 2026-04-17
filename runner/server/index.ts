@@ -11,7 +11,7 @@ import { probeCompositions } from './stages/remotion.js';
 
 const store = createRunsStore(join(CONFIG.projectRoot, CONFIG.runsDir));
 const bus = createEventBus();
-const pipeline = createPipeline({ store, bus, projectRoot: CONFIG.projectRoot, claudeBin: CONFIG.claudeBin });
+const pipeline = createPipeline({ store, bus, projectRoot: CONFIG.projectRoot, claudeBin: CONFIG.claudeBin, ffmpegCmd: CONFIG.ffmpegCmd });
 
 await store.recoverOrphans();
 
@@ -81,6 +81,7 @@ if (existsSync(webDist)) {
 app.listen(CONFIG.port, () => {
   console.log(`Runner up on http://localhost:${CONFIG.port}`);
   console.log(`  claude bin: ${CONFIG.claudeBin}`);
+  console.log(`  ffmpeg cmd: ${CONFIG.ffmpegCmd.join(' ')}`);
 });
 
 const shutdown = () => { console.log('Shutting down…'); process.exit(0); };

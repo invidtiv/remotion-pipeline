@@ -2,6 +2,7 @@ import React from "react";
 import { Composition } from "remotion";
 import { DataChart, dataChartSchema, DataChartProps } from "./compositions/DataChart";
 import { StructuredScript, structuredScriptSchema, StructuredScriptProps } from "./compositions/StructuredScript";
+import { Generated1776465157203, compositionProps as generated1776465157203Props } from "./compositions/Generated1776465157203";
 
 // Default props — used in the Studio preview and as fallback for CLI renders.
 // Override via --props='{"title":"..."}' or --props=./data.json on the command line.
@@ -56,6 +57,23 @@ export const RemotionRoot: React.FC = () => {
         height={1920}
         schema={structuredScriptSchema}
         defaultProps={defaultStructuredProps}
+        calculateMetadata={({ props }) => ({
+          durationInFrames: Math.max(1, Math.round(props.scenes.reduce((a, s) => a + s.durationSec, 0) * props.fps)),
+          props,
+          fps: props.fps,
+          width: props.width,
+          height: props.height,
+        })}
+      />
+      <Composition
+        id="Generated1776465157203"
+        component={Generated1776465157203}
+        durationInFrames={2160}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={structuredScriptSchema}
+        defaultProps={generated1776465157203Props}
         calculateMetadata={({ props }) => ({
           durationInFrames: Math.max(1, Math.round(props.scenes.reduce((a, s) => a + s.durationSec, 0) * props.fps)),
           props,

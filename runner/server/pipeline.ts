@@ -23,6 +23,7 @@ export interface PipelineDeps {
   bus: EventBus;
   projectRoot: string;
   claudeBin: string;
+  ffmpegCmd: string[];
 }
 
 export class PipelineBusy extends Error { constructor() { super('pipeline busy'); } }
@@ -107,7 +108,7 @@ export function createPipeline(deps: PipelineDeps) {
 
       await startStage(id, 'ffmpeg');
       const webOut = join(runDir, 'out', 'web.mp4');
-      const ff = await runFfmpeg({ inFile: rawOut, outFile: webOut, onStdout: s => log(runDir, s) });
+      const ff = await runFfmpeg({ inFile: rawOut, outFile: webOut, ffmpegCmd: deps.ffmpegCmd, onStdout: s => log(runDir, s) });
       await finishStage(id, 'ffmpeg', 'done');
 
       const comps = await probeCompositions(deps.projectRoot);
