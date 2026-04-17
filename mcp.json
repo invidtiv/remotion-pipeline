@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "_comment_heygen": "Talking-head avatar videos. OAuth on first use, uses your HeyGen plan credits.",
+    "heygen": {
+      "url": "https://mcp.heygen.com/sse"
+    },
+
+    "_comment_mcp_video": "82 FFmpeg tools + 8 Remotion tools. Fully local, no API keys.",
+    "mcp-video": {
+      "command": "uvx",
+      "args": ["mcp-video"]
+    },
+
+    "_comment_minimax": "TTS, voice cloning, image + video gen (Hailuo-02). Needs API key.",
+    "minimax": {
+      "command": "uvx",
+      "args": ["minimax-mcp"],
+      "env": {
+        "MINIMAX_API_KEY": "${MINIMAX_API_KEY}",
+        "MINIMAX_API_HOST": "https://api.minimaxi.chat"
+      }
+    }
+  }
+}

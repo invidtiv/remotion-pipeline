@@ -1,0 +1,11 @@
+{
+  "title": "October 2026 Shipments",
+  "subtitle": "Units by region, in thousands",
+  "bars": [
+    { "label": "EMEA", "value": 184, "color": "#4f46e5" },
+    { "label": "APAC", "value": 241, "color": "#06b6d4" },
+    { "label": "Americas", "value": 312, "color": "#ec4899" },
+    { "label": "LATAM", "value": 78, "color": "#f59e0b" }
+  ],
+  "brandColor": "#CCFF00"
+}
